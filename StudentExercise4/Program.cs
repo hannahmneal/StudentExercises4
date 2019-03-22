@@ -9,7 +9,6 @@ namespace StudentExercise4
         static void Main(string[] args)
         {
             //(^_^) INSTRUCTIONS:
-
             /*
                     Write the necessary C# code in Repository.cs and Program.cs to perform the following actions. Make sure to print results of each action to the console.
                          1. Query the database for all the Exercises.
@@ -19,6 +18,7 @@ namespace StudentExercise4
                         5. Insert a new instructor into the database.Assign the instructor to an existing cohort.
                         6. Assign an existing exercise to an existing student.
              * /*/
+
         }
     }
 }
