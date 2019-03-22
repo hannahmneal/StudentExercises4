@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+
 
 namespace StudentExercise4
 {
-    class Repository
+    public class Repository
     {
 
         //(^_^) INSTRUCTIONS:
@@ -19,10 +19,57 @@ namespace StudentExercise4
                     6. Assign an existing exercise to an existing student.
          * /*/
 
+        public SqlConnection Connection
+        {
+            get
+            {
+                string _connectionString = "Data Source=HNEAL-PC\\SQLEXPRESS;Initial Catalog=StudentExercise3; Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+                return new SqlConnection(_connectionString);
+            }
+        }
+
         //=====================      Get All Exercises       ==================================
         //1. Query the database for all the Exercises.
         //NOTE: SELECT - FROM   
 
+        public List<Exercise> GetAllExercises()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT Id, ExerciseName, ExerciseLanguage FROM Exercise";
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Exercise> exercises = new List<Exercise>();
+
+                    while (reader.Read())
+                    {
+                        int idColumnPosition = reader.GetOrdinal("Id");
+                        int idValue = reader.GetInt32(idColumnPosition);
+
+                        int exerciseNameColumnPosition = reader.GetOrdinal("ExerciseName");
+                        string exerciseNameValue = reader.GetString(exerciseNameColumnPosition);
+
+                        int exerciseLanguageColumnPosition = reader.GetOrdinal("ExerciseLanguage");
+                        string exerciseLanguageValue = reader.GetString(exerciseLanguageColumnPosition);
+
+                        Exercise exercise = new Exercise
+                        {
+                            Id = idValue,
+                            ExerciseName = exerciseNameValue,
+                            ExerciseLanguage = exerciseLanguageValue
+                        };
+                        exercises.Add(exercise);
+                    }
+                    reader.Close();
+
+                    return exercises;
+                }
+            }
+        }
 
         //=======================       GetAllJsExercises      ===============================
         //2. Find all the exercises in the database where the language is JavaScript.

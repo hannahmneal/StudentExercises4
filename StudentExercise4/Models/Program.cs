@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace StudentExercise4
 {
@@ -19,6 +18,20 @@ namespace StudentExercise4
                         6. Assign an existing exercise to an existing student.
              * /*/
 
+            Repository repository = new Repository();
+
+            List<Exercise> exercises = repository.GetAllExercises();
+            Console.WriteLine("All Exercises" , exercises);
+            Pause();
+
         }
+            public static void Pause()
+            {
+                Console.WriteLine();
+                Console.Write("Press any key to continue...");
+                Console.Read();
+                Console.WriteLine();
+                Console.WriteLine();
+            }
     }
 }
