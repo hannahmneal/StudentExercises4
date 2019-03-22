@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StudentExercise4.Models;
 
 namespace StudentExercise4
 {
@@ -21,17 +22,14 @@ namespace StudentExercise4
             Repository repository = new Repository();
 
             List<Exercise> exercises = repository.GetAllExercises();
-            Console.WriteLine("All Exercises" , exercises);
-            Pause();
 
-        }
-            public static void Pause()
+        Console.WriteLine("All Exercises:");
+            foreach (Exercise exercise in exercises)
             {
-                Console.WriteLine();
-                Console.Write("Press any key to continue...");
-                Console.Read();
-                Console.WriteLine();
-                Console.WriteLine();
-            }
+
+                Console.WriteLine($"{exercise.Id}: {exercise.ExerciseName}, Language:  {exercise.ExerciseLanguage}");
+            }  
+        Console.ReadLine();
+        }
     }
 }
