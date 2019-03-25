@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using StudentExercise4.Models;
 
-namespace StudentExercise4
+namespace StudentExercise4.Data
 {
     public class Repository
     {
@@ -23,7 +23,7 @@ namespace StudentExercise4
         {
             get
             {
-                string _connectionString = "Data Source=HNEAL-PC\\SQLEXPRESS;Initial Catalog=StudentExercise3; Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+                string _connectionString = "Server=localhost\\SQLEXPRESS; Database=StudentExercise3; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
                 return new SqlConnection(_connectionString);
             }
         }
@@ -39,7 +39,12 @@ namespace StudentExercise4
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, ExerciseName, ExerciseLanguage FROM Exercise";
+                    cmd.CommandText = @"SELECT
+                                            e.Id, 
+                                            e.ExerciseName,                                             e.ExerciseLanguage
+                                        FROM Exercise e";
+                    
+                    //? SQL Parameters for a "GET"? 
 
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -56,7 +61,7 @@ namespace StudentExercise4
                         int exerciseLanguageColumnPosition = reader.GetOrdinal("ExerciseLanguage");
                         string exerciseLanguageValue = reader.GetString(exerciseLanguageColumnPosition);
 
-                        Exercise exercise = new Exercise
+                        Exercise exercise = new Exercise()
                         {
                             Id = idValue,
                             ExerciseName = exerciseNameValue,
@@ -65,16 +70,51 @@ namespace StudentExercise4
                         exercises.Add(exercise);
                     }
                     reader.Close();
-
                     return exercises;
                 }
             }
         }
 
-        //=======================       GetAllJsExercises      ===============================
+        //=======================       GetAllExercisesByLanguage      ===========================
         //2. Find all the exercises in the database where the language is JavaScript.
         //NOTE: SELECT - FROM - WHERE
 
+        public List<Exercise> GetExercisesByLanguage(string exerciseLanguage)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT
+                                            e.Id,
+                                            e.ExerciseName,
+                                            e.ExerciseLanguage
+                                        FROM Exercise e
+                                        WHERE e.ExerciseLanguage = @exerciseLanguage";
+                   cmd.Parameters.Add(new SqlParameter("@exerciseLanguage", exerciseLanguage));
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Exercise> exercisesByLangList = new List<Exercise>();
+                    while (reader.Read())
+                    {
+                        Exercise exerciseByLang = new Exercise()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            ExerciseName = reader.GetString(reader.GetOrdinal("ExerciseName")),
+                            ExerciseLanguage = reader.GetString(reader.GetOrdinal("ExerciseLanguage"))
+                        };
+
+                        exercisesByLangList.Add(exerciseByLang);
+                    }
+
+                    reader.Close();
+
+                    return exercisesByLangList;
+                }
+            }
+        }
 
         //============================  AddExercise   =====================================
         //3. Insert a new exercise into the database.

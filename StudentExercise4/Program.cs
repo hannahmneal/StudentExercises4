@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StudentExercise4.Data;
 using StudentExercise4.Models;
 
 namespace StudentExercise4
@@ -20,16 +21,44 @@ namespace StudentExercise4
              * /*/
 
             Repository repository = new Repository();
-
+            //NOTE: GetAllExercises and put them in a list of Exercises; print them to the console.
             List<Exercise> exercises = repository.GetAllExercises();
 
-        Console.WriteLine("All Exercises:");
+            Console.WriteLine("All Exercises:");
             foreach (Exercise exercise in exercises)
             {
-
                 Console.WriteLine($"{exercise.Id}: {exercise.ExerciseName}, Language:  {exercise.ExerciseLanguage}");
-            }  
-        Console.ReadLine();
+            }
+            //Console.Read();
+
+
+
+            //NOTE: GetAllJsExercises 
+
+            List<Exercise> exercisesByLangList =repository.GetExercisesByLanguage("Javascript");
+
+            Console.WriteLine("All Javascript Exercises:");
+            foreach(Exercise exerciseByLang in exercisesByLangList)
+            {
+                Console.WriteLine($"JS Exercise: {exerciseByLang.Id}: {exerciseByLang.ExerciseName},  {exerciseByLang.ExerciseLanguage}");
+            }
+            Console.Read();
+
+
         }
+
+        //NOTE: Not sure if I want to use this yet:
+
+        //    public static void Pause()
+        //    {
+        //        //Console.WriteLine();
+        //        Console.Write("Press any key to continue...");
+        //        Console.Read();
+        //        Console.WriteLine();
+        //        Console.WriteLine();
+        //        Console.WriteLine();
+        //        Console.WriteLine();
+
+        //}
     }
 }
