@@ -30,22 +30,42 @@ namespace StudentExercise4
                 Console.WriteLine($"{exercise.Id}: {exercise.ExerciseName}, Language:  {exercise.ExerciseLanguage}");
             }
             //Console.Read();
+            //NOTE: In order to print "the whole" set of Console.WriteLines that are called in Program.cs, you need to place Console.Read(); at the end of all the blocks of code; if Console.Read() is placed after each block, you will have to press 'enter' to run the next call.
 
 
 
             //NOTE: GetAllJsExercises 
 
-            List<Exercise> exercisesByLangList =repository.GetExercisesByLanguage("Javascript");
+            List<Exercise> exercisesByLangList = repository.GetExercisesByLanguage("Javascript");
 
             Console.WriteLine("All Javascript Exercises:");
-            foreach(Exercise exerciseByLang in exercisesByLangList)
+            foreach (Exercise exerciseByLang in exercisesByLangList)
             {
                 Console.WriteLine($"JS Exercise: {exerciseByLang.Id}: {exerciseByLang.ExerciseName},  {exerciseByLang.ExerciseLanguage}");
             }
+            //Console.Read();
+
+            //NOTE: Call GetAllExercises again after adding a new Exercise to the List
+
+            Exercise StudentExercise4 = new Exercise()
+            {
+                ExerciseName = "Student Exercise 4",
+                ExerciseLanguage = "C#"
+            };
+            repository.AddExercise(StudentExercise4);
+
+            Console.WriteLine("All Exercises after addition:");
+            foreach (Exercise exercise in repository.GetAllExercises())
+            {
+                Console.WriteLine($"{exercise.Id}: {exercise.ExerciseName}, Language:  {exercise.ExerciseLanguage}");
+            }
             Console.Read();
-
-
         }
+
+
+
+
+
 
         //NOTE: Not sure if I want to use this yet:
 

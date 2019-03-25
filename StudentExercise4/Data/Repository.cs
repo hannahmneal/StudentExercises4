@@ -120,6 +120,44 @@ namespace StudentExercise4.Data
         //3. Insert a new exercise into the database.
         //NOTE: INSERT INTO
 
+        public void AddExercise(Exercise exercise)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = $"INSERT INTO Exercise (ExerciseName, ExerciseLanguage) Values (@ExerciseName, @ExerciseLanguage)";
+
+                    cmd.Parameters.Add(new SqlParameter("@ExerciseName", exercise.ExerciseName));
+
+                    cmd.Parameters.Add(new SqlParameter("@ExerciseLanguage", exercise.ExerciseLanguage));
+
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+
+        //NOTE: Update the Exercises, since you just added one:
+
+        //public void UpdateExercises()
+        //{
+        //    using (SqlConnection conn = Connection)
+        //    {
+        //        conn.Open();
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            cmd.CommandText = @"UPDATE Exercise
+        //                                SET ExerciseName = @ExerciseName,
+        //                                    ExerciseLanguage = @ExerciseLanguage";
+
+        //            cmd.Parameters.Add(new SqlParameter("@ExerciseName", exercise.ExerciseName));
+
+
+        //        }
+        //}
+          
 
         //=======================       GetAllInstructors      ================================
         //4. Find all instructors in the database. Include each instructor's cohort.
