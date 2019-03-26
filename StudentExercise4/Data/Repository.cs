@@ -139,29 +139,65 @@ namespace StudentExercise4.Data
             }
         }
 
-        //NOTE: Update the Exercises, since you just added one:
-
-        //public void UpdateExercises()
-        //{
-        //    using (SqlConnection conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (SqlCommand cmd = conn.CreateCommand())
-        //        {
-        //            cmd.CommandText = @"UPDATE Exercise
-        //                                SET ExerciseName = @ExerciseName,
-        //                                    ExerciseLanguage = @ExerciseLanguage";
-
-        //            cmd.Parameters.Add(new SqlParameter("@ExerciseName", exercise.ExerciseName));
-
-
-        //        }
-        //}
-          
 
         //=======================       GetAllInstructors      ================================
         //4. Find all instructors in the database. Include each instructor's cohort.
         //NOTE: SELECT - FROM 
+
+        public List<Instructor> GetAllInstructors()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT
+                                            i.Id,
+                                            i.InstructorFirstName,
+                                            i.InstructorLastName,
+                                            i.InstructorSlackHandle,
+                                            i.instructor_cohort_id
+                                        FROM Instructor i";
+
+                    //? SQL Parameters for a "GET"? 
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Instructor> instructors = new List<Instructor>();
+
+                    while (reader.Read())
+                    {
+                        int idColumnPosition = reader.GetOrdinal("Id");
+                        int idValue = reader.GetInt32(idColumnPosition);
+
+                        int instructorFirstNameColumnPosition = reader.GetOrdinal("InstructorFirstName");
+                        string instructorFirstNameValue = reader.GetString(instructorFirstNameColumnPosition);
+
+                        int instructorLastNameColumnPosition = reader.GetOrdinal("InstructorLastName");
+                        string instructorLastNameValue = reader.GetString(instructorLastNameColumnPosition);
+
+                        int instructorSlackHandleColumnPosition = reader.GetOrdinal("InstructorSlackHandle");
+                        string instructorSlackHandleValue = reader.GetString(instructorSlackHandleColumnPosition);
+
+                        int instructor_cohort_idColumnPosition = reader.GetOrdinal("instructor_cohort_id");
+                        int instructor_cohort_idValue = reader.GetInt32(instructor_cohort_idColumnPosition);
+
+
+                        Instructor instructor = new Instructor()
+                        {
+                            Id = idValue,
+                            InstructorFirstName = instructorFirstNameValue,
+                            InstructorLastName = instructorLastNameValue,
+                            InstructorSlackHandle = instructorSlackHandleValue,
+                            instructor_cohort_id = instructor_cohort_idValue
+                        };
+                        instructors.Add(instructor);
+                    }
+                    reader.Close();
+                    return instructors;
+                }
+            }
+        }
 
 
         //==========================    GetAllCohorts   ====================================
