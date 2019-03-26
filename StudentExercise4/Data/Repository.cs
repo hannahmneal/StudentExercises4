@@ -203,6 +203,45 @@ namespace StudentExercise4.Data
         //==========================    GetAllCohorts   ====================================
         //NOTE: SELECT - FROM
 
+        public List<Cohort> GetAllCohorts()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT
+                                            c.Id,
+                                            c.CohortName
+                                        FROM Cohort c";
+
+                    //? SQL Parameters for a "GET"? 
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Cohort> cohorts = new List<Cohort>();
+
+                    while (reader.Read())
+                    {
+                        int idColumnPosition = reader.GetOrdinal("Id");
+                        int idValue = reader.GetInt32(idColumnPosition);
+
+                        int cohortNameColumnPosition = reader.GetOrdinal("CohortName");
+                        string cohortNameValue = reader.GetString(cohortNameColumnPosition);
+
+                        Cohort cohort = new Cohort()
+                        {
+                            Id = idValue,
+                            CohortName = cohortNameValue
+                        };
+                        cohorts.Add(cohort);
+                    }
+                    reader.Close();
+                    return cohorts;
+                }
+            }
+        }
+
 
         //========================  GetAllInstructorsWithCohort   ========================
         //NOTE: SELECT - FROM --- JOIN - ON

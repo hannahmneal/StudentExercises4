@@ -71,10 +71,29 @@ namespace StudentExercise4
             {
             Console.WriteLine($"{instructor.Id}: {instructor.InstructorFirstName},   {instructor.InstructorLastName}, {instructor.InstructorSlackHandle}, {instructor.instructor_cohort_id}");
             }
+            //Console.Read();
+
+
+            //NOTE: call GetAllCohorts:
+
+
+            List<Cohort> cohorts = repository.GetAllCohorts();
+
+            Console.WriteLine("All Cohorts: ");
+            foreach(Cohort cohort in cohorts)
+            {
+                Console.WriteLine($"{cohort.Id}: {cohort.CohortName}");
+            }
             Console.Read();
+
         }
 
+        //!!!!!!!!!
+
         //NOTE: If repository has red squigglies, make sure the block of code is inside the right set of brackets! You've overlooked that twice. 
+
+        //!!!!!!!
+
 
 
 
