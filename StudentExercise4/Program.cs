@@ -84,8 +84,16 @@ namespace StudentExercise4
             {
                 Console.WriteLine($"{cohort.Id}: {cohort.CohortName}");
             }
-            Console.Read();
+            //Console.Read();
 
+
+            //NOTE: Call GetAllInstructorsWithCohort
+
+
+            List<Instructor> instructorsWithCohort = repository.GetAllInstructorsWithCohort();
+
+            PrintInstructorsWithCohort("Instructors with their Cohorts: ", instructors);
+            //NOTE : this method is defined at the bottom of Program.cs, in "Helper Functions"
         }
 
         //!!!!!!!!!
@@ -94,25 +102,42 @@ namespace StudentExercise4
 
         //!!!!!!!
 
+        //----------------------------      HELPER FUNCTIONS    -----------------------------------------
+
+        public static void PrintInstructorsWithCohort(string title, List<Instructor> instructors)
+        {
+            Console.WriteLine(title);
+            foreach (Instructor instruct in instructors)
+            {
+                if(instruct.Cohort != null)
+                {
+                Console.WriteLine($"{instruct.Id}: {instruct.InstructorFirstName} {instruct.InstructorLastName}, {instruct.InstructorSlackHandle}, {instruct.Cohort.CohortName}");
+
+                } else
+                {
+                Console.WriteLine($"{instruct.Id}: {instruct.InstructorFirstName} {instruct.InstructorLastName}, {instruct.InstructorSlackHandle}");
+                }
+
+            Console.Read();
+            };
+
+        }
 
 
 
 
+        //NOTE: Not sure if I want to use this yet:
 
+        //    public static void Pause()
+        //    {
+        //        //Console.WriteLine();
+        //        Console.Write("Press any key to continue...");
+        //        Console.Read();
+        //        Console.WriteLine();
+        //        Console.WriteLine();
+        //        Console.WriteLine();
+        //        Console.WriteLine();
 
-
-    //NOTE: Not sure if I want to use this yet:
-
-    //    public static void Pause()
-    //    {
-    //        //Console.WriteLine();
-    //        Console.Write("Press any key to continue...");
-    //        Console.Read();
-    //        Console.WriteLine();
-    //        Console.WriteLine();
-    //        Console.WriteLine();
-    //        Console.WriteLine();
-
-    //}
-}
+        //}
+    }
 }

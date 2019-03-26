@@ -247,39 +247,83 @@ namespace StudentExercise4.Data
         //NOTE: SELECT - FROM --- JOIN - ON
         //NOTE: The instructor object will contain all info from the instructor table + the FK for cohort (instructor_cohort_id) +  a new Cohort object (which will contain all info from cohort table)
 
+        public List<Instructor> GetAllInstructorsWithCohort()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT 
+                                            i.Id, 
+                                            i.InstructorFirstName, 
+                                            i.InstructorLastName,
+                                            i.InstructorSlackHandle,
+                                            i.instructor_cohort_id,
+                                            c.CohortName
+                                        FROM Instructor i INNER JOIN Cohort c ON i.instructor_cohort_id = c.Id";
 
-        //===============GetAllInstructorsWithCohortById(int CohortId)==================
-        //NOTE: SELECT - FROM - WHERE
-        //NOTE: The instructor object will contain all information from the instructor table + the FK for cohort (instructor_cohort_id) + a new Cohort object (which will contain all info from cohort table)
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Instructor> instructors = new List<Instructor>();
+                    while (reader.Read())
+                    {
+                        Instructor instructor = new Instructor
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            InstructorFirstName = reader.GetString(reader.GetOrdinal("InstructorFirstName")),
+                            InstructorLastName = reader.GetString(reader.GetOrdinal("InstructorLastName")),
+                            InstructorSlackHandle = reader.GetString(reader.GetOrdinal("InstructorSlackHandle")),
+                            instructor_cohort_id = reader.GetInt32(reader.GetOrdinal("instructor_cohort_id")),
+
+                            Cohort = new Cohort //NOTE: See note in Instructor.cs about cohort prop
+
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("instructor_cohort_id")),
+                                CohortName = reader.GetString(reader.GetOrdinal("CohortName"))
+                            }
+                        };
+                        instructors.Add(instructor);
+                    }
+                    reader.Close();
+                    return instructors;
+                }
+            }
+        }
 
 
-        //==========================    AddInstructor   =================================
-        //5. Insert a new instructor into the database. Assign the instructor to an existing cohort.
-        //NOTE: INSERT INTO 
-        //NOTE: Include instructor info and make allowances for the FK cohort id in the SQL params.
+                    //===============GetAllInstructorsWithCohortById(int CohortId)==================
+                    //NOTE: SELECT - FROM - WHERE
+                    //NOTE: The instructor object will contain all information from the instructor table + the FK for cohort (instructor_cohort_id) + a new Cohort object (which will contain all info from cohort table)
 
 
-        //========================      UpdateInstructor        ============================
-        //NOTE: UPDATE - SET - WHERE
+                    //==========================    AddInstructor   =================================
+                    //5. Insert a new instructor into the database. Assign the instructor to an existing cohort.
+                    //NOTE: INSERT INTO 
+                    //NOTE: Include instructor info and make allowances for the FK cohort id in the SQL params.
 
 
-        //=========================     GetAllStudents      ===============================
-        //6. Assign an existing exercise to an existing student.
-        //NOTE: SELECT - FROM
+                    //========================      UpdateInstructor        ============================
+                    //NOTE: UPDATE - SET - WHERE
 
 
-        //=====================     GetAllStudentExercises      ===========================
-        //NOTE: SELECT - FROM --- JOIN - ON
-        //NOTE: This will handle data retrieval for the "StudentExercises" join table in the ERD. This method needs to join the StudentExercises and Student tables.
+                    //=========================     GetAllStudents      ===============================
+                    //6. Assign an existing exercise to an existing student.
+                    //NOTE: SELECT - FROM
 
 
-        //=====================     GetAllAssignedExercises     ===========================
-        //NOTE: SELECT - FROM --- JOIN - ON
-        //NOTE: This will handle data retrieval for the "StudentExercises" join table in the ERD. This method needs to join the AssignedStudentExercises and Student tables.
+                    //=====================     GetAllStudentExercises      ===========================
+                    //NOTE: SELECT - FROM --- JOIN - ON
+                    //NOTE: This will handle data retrieval for the "StudentExercises" join table in the ERD. This method needs to join the StudentExercises and Student tables.
 
 
-        //======================    GetAllStudentsWithExercises     =======================
-        //NOTE: SELECT - FROM --- JOIN - ON
+                    //=====================     GetAllAssignedExercises     ===========================
+                    //NOTE: SELECT - FROM --- JOIN - ON
+                    //NOTE: This will handle data retrieval for the "StudentExercises" join table in the ERD. This method needs to join the AssignedStudentExercises and Student tables.
 
-    }
+
+                    //======================    GetAllStudentsWithExercises     =======================
+                    //NOTE: SELECT - FROM --- JOIN - ON
+
+                }
 }
